@@ -4,23 +4,14 @@
         {
             "label": "Build VASM GBA ROM",
             "type": "shell",
-            "command": "vasmarm_std",
-            "args": [
-                "-m7tdmi",
-                "-chklabels",
-                "-nocase",
-                "-Dvasm=1",
-                "-DBuildGBA=1",
-                "-Fbin",
-                "-L",
-                "${workspaceFolder}/${input:tutorialFolder}/Listing.txt",
-                "-o",
-                "${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba",
-                "${workspaceFolder}/${input:tutorialFolder}/GBA_Hello.asm"
-            ],
+            "command": "vasmarm_std -m7tdmi -chklabels -nocase -Dvasm=1 -DBuildGBA=1 -Fbin -L \"${workspaceFolder}/${input:tutorialFolder}/Listing.txt\" -o \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba\" \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.asm\" && gbafix \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba\"",
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
             }
         }
     ],
