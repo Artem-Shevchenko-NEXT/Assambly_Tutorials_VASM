@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build VASM GBA ROM",
+            "type": "shell",
+            "command": "vasmarm_std",
+            "args": [
+                "-m7tdmi",
+                "-chklabels",
+                "-nocase",
+                "-Dvasm=1",
+                "-DBuildGBA=1",
+                "-Fbin",
+                "-L",
+                "${workspaceFolder}/${input:tutorialFolder}/Listing.txt",
+                "-o",
+                "${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba",
+                "${workspaceFolder}/${input:tutorialFolder}/GBA_Hello.asm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "tutorialFolder",
+            "type": "promptString",
+            "description": "Which tutorial folder do you want to build?",
+            "default": "Hello_World"
+        }
+    ]
+}
