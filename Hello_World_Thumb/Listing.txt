@@ -2,7 +2,7 @@ Sections:
 00: "org0001:8000000" (8000000-8000290)
 
 
-Source: "C:/Users/Artem/Documents/universitet/4.semester/P4_project/Assambly_Tutorials_VASM/Hello_World_Thumb/Hello_World_Thumb.asm"
+Source: "Hello_World_Thumb.asm"
                             	     1: ;Text after semicolon is comments, you don't need to type it in
                             	     2: 
                             	     3: 	.equ CursorX,0x02000000		;Cursor pointer in Ram Area
