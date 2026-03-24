@@ -146,7 +146,7 @@ SpriteAddress:
 	.long SpriteTest
 
 SpriteTest:
-	.incbin "Sprite_16bpp.RAW" ; ARGB 16bpp raw sprite data (converted NDS sprite)
+	.incbin "Sprite_16bpp.RAW" ; ARGB 16bpp raw sprite data 
 
 BitmapFont:
 	.incbin "Font96.FNT"
