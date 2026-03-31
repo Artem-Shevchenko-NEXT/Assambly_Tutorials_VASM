@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build VASM GBA ROM (With gbafix)",
+            "type": "shell",
+            "command": "vasmarm_std -m7tdmi -chklabels -nocase -Dvasm=1 -DBuildGBA=1 -Fbin -L \"${workspaceFolder}/${input:tutorialFolder}/Listing.txt\" -o \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba\" \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.asm\" && gbafix \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba\"",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": ["/d", "/c"]
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build VASM GBA ROM (No gbafix)",
+            "type": "shell",
+            "command": "vasmarm_std -m7tdmi -chklabels -nocase -Dvasm=1 -DBuildGBA=1 -Fbin -L \"${workspaceFolder}/${input:tutorialFolder}/Listing.txt\" -o \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.gba\" \"${workspaceFolder}/${input:tutorialFolder}/${input:tutorialFolder}.asm\"",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": ["/d", "/c"]
+                }
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "tutorialFolder",
+            "type": "promptString",
+            "description": "Which tutorial folder do you want to build?",
+            "default": "Hello_World"
+        }
+    ]
+}

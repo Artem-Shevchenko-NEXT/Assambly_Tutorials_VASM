@@ -1,0 +1,1728 @@
+Sections:
+00: "org0001:8000000" (8000000-8000C98)
+
+
+Source: "C:/Users/Artem/Documents/universitet/4.semester/P4_project/Assambly_Tutorials_VASM/Sprites_Graphics/Sprites_Graphics.asm"
+                            	     1: 	;.arm                 ; Use arm instruction set.
+                            	     2:     ; header...
+                            	     3:     .org  0x08000000     ; GBA ROM Address starts at 0x08000000       
+                            	     4: 	.equ ProgBase,0;0x08000000
+                            	     5:     ;.section text			
+                            	     6: 
+                            	     7: 	.equ ramarea, 0x02000000
+                            	     8: 	
+                            	     9: 	.equ userram, 0x02000000
+                            	    10: 	
+                            	    11: 	.equ CursorX,ramarea+32
+                            	    12: 
+                            	    13: 	.equ MonitorWidth,6
+                            	    14:  
+                            	    15: ;000h    4     ROM Entry Point  (32bit ARM branch opcode, eg. "B rom_start") 
+00:08000000 380000EA        	    16:     b	GbaStart
+                            	    17: 
+                            	    18: 	.equ CursorX,ramarea+32
+                            	    19: 	.equ CursorY,ramarea+33
+                            	    20: 
+                            	    21: 
+                            	    22: 
+                            	    23: 
+                            	    24: 	
+                            	    25: ;004h    156   Nintendo Logo    (compressed bitmap, required!)
+00:08000004 C8              	    26: 	.byte 0xC8,0x60,0x4F,0xE2,0x01,0x70,0x8F,0xE2,0x17,0xFF,0x2F,0xE1,0x12,0x4F,0x11,0x48     ; C
+00:08000005 60
+00:08000006 4F
+00:08000007 E2
+00:08000008 01
+00:08000009 70
+00:0800000A 8F
+00:0800000B E2
+00:0800000C 17
+00:0800000D FF
+00:0800000E 2F
+00:0800000F E1
+00:08000010 12
+00:08000011 4F
+00:08000012 11
+00:08000013 48
+00:08000014 12              	    27: 	.byte 0x12,0x4C,0x20,0x60,0x64,0x60,0x7C,0x62,0x30,0x1C,0x39,0x1C,0x10,0x4A,0x00,0xF0     ; D
+00:08000015 4C
+00:08000016 20
+00:08000017 60
+00:08000018 64
+00:08000019 60
+00:0800001A 7C
+00:0800001B 62
+00:0800001C 30
+00:0800001D 1C
+00:0800001E 39
+00:0800001F 1C
+00:08000020 10
+00:08000021 4A
+00:08000022 00
+00:08000023 F0
+00:08000024 14              	    28:     .byte 0x14,0xF8,0x30,0x6A,0x80,0x19,0xB1,0x6A,0xF2,0x6A,0x00,0xF0,0x0B,0xF8,0x30,0x6B     ; E
+00:08000025 F8
+00:08000026 30
+00:08000027 6A
+00:08000028 80
+00:08000029 19
+00:0800002A B1
+00:0800002B 6A
+00:0800002C F2
+00:0800002D 6A
+00:0800002E 00
+00:0800002F F0
+00:08000030 0B
+00:08000031 F8
+00:08000032 30
+00:08000033 6B
+00:08000034 80              	    29:     .byte 0x80,0x19,0xB1,0x6B,0xF2,0x6B,0x00,0xF0,0x08,0xF8,0x70,0x6A,0x77,0x6B,0x07,0x4C     ; F
+00:08000035 19
+00:08000036 B1
+00:08000037 6B
+00:08000038 F2
+00:08000039 6B
+00:0800003A 00
+00:0800003B F0
+00:0800003C 08
+00:0800003D F8
+00:0800003E 70
+00:0800003F 6A
+00:08000040 77
+00:08000041 6B
+00:08000042 07
+00:08000043 4C
+00:08000044 60              	    30:     .byte 0x60,0x60,0x38,0x47,0x07,0x4B,0xD2,0x18,0x9A,0x43,0x07,0x4B,0x92,0x08,0xD2,0x18     ; 10
+00:08000045 60
+00:08000046 38
+00:08000047 47
+00:08000048 07
+00:08000049 4B
+00:0800004A D2
+00:0800004B 18
+00:0800004C 9A
+00:0800004D 43
+00:0800004E 07
+00:0800004F 4B
+00:08000050 92
+00:08000051 08
+00:08000052 D2
+00:08000053 18
+00:08000054 0C              	    31:     .byte 0x0C,0xDF,0xF7,0x46,0x04,0xF0,0x1F,0xE5,0x00,0xFE,0x7F,0x02,0xF0,0xFF,0x7F,0x02     ; 11
+00:08000055 DF
+00:08000056 F7
+00:08000057 46
+00:08000058 04
+00:08000059 F0
+00:0800005A 1F
+00:0800005B E5
+00:0800005C 00
+00:0800005D FE
+00:0800005E 7F
+00:0800005F 02
+00:08000060 F0
+00:08000061 FF
+00:08000062 7F
+00:08000063 02
+00:08000064 F0              	    32:     .byte 0xF0,0x01,0x00,0x00,0xFF,0x01,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00     ; 12
+00:08000065 01
+00:08000066 00
+00:08000067 00
+00:08000068 FF
+00:08000069 01
+00:0800006A 00
+00:0800006B 00
+00:0800006C 00
+00:0800006D 00
+00:0800006E 00
+00:0800006F 04
+00:08000070 00
+00:08000071 00
+00:08000072 00
+00:08000073 00
+00:08000074 00              	    33:     .byte 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00     ; 13
+00:08000075 00
+00:08000076 00
+00:08000077 00
+00:08000078 00
+00:08000079 00
+00:0800007A 00
+00:0800007B 00
+00:0800007C 00
+00:0800007D 00
+00:0800007E 00
+00:0800007F 00
+00:08000080 00
+00:08000081 00
+00:08000082 00
+00:08000083 00
+00:08000084 00              	    34:     .byte 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00     ; 14
+00:08000085 00
+00:08000086 00
+00:08000087 00
+00:08000088 00
+00:08000089 00
+00:0800008A 00
+00:0800008B 00
+00:0800008C 00
+00:0800008D 00
+00:0800008E 00
+00:0800008F 00
+00:08000090 00
+00:08000091 00
+00:08000092 00
+00:08000093 00
+00:08000094 00              	    35: 	.byte 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1A,0x9E,0x7B,0xEB     ; 15
+00:08000095 00
+00:08000096 00
+00:08000097 00
+00:08000098 00
+00:08000099 00
+00:0800009A 00
+00:0800009B 00
+00:0800009C 00
+00:0800009D 00
+00:0800009E 00
+00:0800009F 00
+00:080000A0 1A
+00:080000A1 9E
+00:080000A2 7B
+00:080000A3 EB
+                            	    36: 	
+                            	    37: 
+                            	    38: ;0A0h    12    Game Title       (uppercase ascii, max 12 characters)	
+                            	    39:     ;		123456789012
+00:080000A4 4C4541524E41534D	    40:     .ascii "LEARNASM.NET"
+00:080000AC 2E4E4554
+                            	    41: ;0ACh    4     Game Code        (uppercase ascii, 4 characters)
+                            	    42: 	
+00:080000B0 30303030        	    43:     .ascii "0000"			;Code
+                            	    44: ;0B0h    2     Maker Code       (uppercase ascii, 2 characters)
+00:080000B4 4742            	    45:     .byte "GB"				;Maker
+                            	    46: ;0B2h    1     Fixed value      (must be 96h, required!)
+00:080000B6 96              	    47: 	.byte 0x96
+                            	    48: ;0B3h    1     Main unit code   (00h for current GBA models)
+00:080000B7 00              	    49: 	.byte 0x00
+                            	    50: ;0B4h    1     Device type      (usually 00h) (bit7=DACS/debug related)
+00:080000B8 00              	    51: 	.byte 0x00
+                            	    52: ;0B5h    7     Reserved Area    (should be zero filled)
+00:080000B9 00              	    53: 	.byte 0x00,0x00,0x00,0x00,0x00,0x00,0x00
+00:080000BA 00
+00:080000BB 00
+00:080000BC 00
+00:080000BD 00
+00:080000BE 00
+00:080000BF 00
+                            	    54: ;0BCh    1     Software version (usually 00h)
+00:080000C0 00              	    55: 	.byte 0x00
+                            	    56: ;0BDh    1     Complement check (header checksum, required!)
+00:080000C1 00              	    57: 	.byte 0x00
+                            	    58: ;0BEh    2     Reserved Area    (should be zero filled)
+00:080000C2 00              	    59: 	.byte 0x00,0x00
+00:080000C3 00
+                            	    60: ;0C0h    4     RAM Entry Point  (32bit ARM branch opcode, eg. "B ram_start")
+00:080000C4 00              	    61: 	.byte 0x00,0x00,0x00,0x00
+00:080000C5 00
+00:080000C6 00
+00:080000C7 00
+                            	    62: ;0C4h    1     Boot mode        (init as 00h - BIOS overwrites this value!)
+00:080000C8 00              	    63: 	.byte 0x00
+                            	    64: ;0C5h    1     Slave ID Number  (init as 00h - BIOS overwrites this value!)
+00:080000C9 00              	    65: 	.byte 0x00
+                            	    66: ;0C6h    26    Not used         (seems to be unused)
+00:080000CA 00              	    67: 	.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:080000CB 00
+00:080000CC 00
+00:080000CD 00
+00:080000CE 00
+00:080000CF 00
+00:080000D0 00
+00:080000D1 00
+00:080000D2 00
+00:080000D3 00
+00:080000D4 00
+00:080000D5 00
+00:080000D6 00
+00:080000D7 00
+00:080000D8 00
+00:080000D9 00
+00:080000DA 00
+00:080000DB 00
+00:080000DC 00
+00:080000DD 00
+00:080000DE 00
+00:080000DF 00
+00:080000E0 00
+00:080000E1 00
+00:080000E2 00
+00:080000E3 00
+                            	    68: ;0E0h    4     JOYBUS Entry Pt. (32bit ARM branch opcode, eg. "B joy_start")
+00:080000E4 00              	    69: 	.byte 0x00,0x00,0x00,0x00
+00:080000E5 00
+00:080000E6 00
+00:080000E7 00
+                            	    70: 
+                            	    71: GbaStart:
+                            	    72: 
+00:080000E8 03D4A0E3        	    73: 	mov sp,#0x03000000			;Init Stack Pointer
+                            	    74: 
+                            	    75: 	
+                            	    76: ;Nintendo DDS
+                            	    77: 	
+                            	    78: 	;4000304h - NDS9 - POWCNT1 - Graphics Power Control Register (R/W)
+                            	    79: 		;0     Enable Flag for both LCDs (0=Disable) (Prohibited, see notes)
+                            	    80: 		;1     2D Graphics Engine A      (0=Disable) (Ports 008h-05Fh, Pal 5000000h)
+                            	    81: 		;2     3D Rendering Engine       (0=Disable) (Ports 320h-3FFh)
+                            	    82: 		;3     3D Geometry Engine        (0=Disable) (Ports 400h-6FFh)
+                            	    83: 		;4-8   Not used
+                            	    84: 		;9     2D Graphics Engine B      (0=Disable) (Ports 1008h-105Fh, Pal 5000400h)
+                            	    85: 		;10-14 Not used
+                            	    86: 		;15    Display Swap (0=Send Display A to Lower Screen, 1=To Upper Screen)
+                            	    87: 		;16-31 Not used
+                            	    88: 		
+                            	    89: 	;4000000h - DISPCNT - LCD Control (Read/Write)
+                            	    90: 		;Bit  Engine Expl.
+                            	    91: 		;0-2   A+B   BG Mode
+                            	    92: 		;3     A     BG0 2D/3D Selection (instead CGB Mode) (0=2D, 1=3D)
+                            	    93: 		;4     A+B   Tile OBJ Mapping        (0=2D; max 32KB, 1=1D; max 32KB..256KB)
+                            	    94: 		;5     A+B   Bitmap OBJ 2D-Dimension (0=128x512 dots, 1=256x256 dots)
+                            	    95: 		;6     A+B   Bitmap OBJ Mapping      (0=2D; max 128KB, 1=1D; max 128KB..256KB)
+                            	    96: 		;7-15  A+B   Same as GBA
+                            	    97: 		;16-17 A+B   Display Mode (Engine A: 0..3, Engine B: 0..1, GBA: Green Swap)
+                            	    98: 		;18-19 A     VRAM block (0..3=VRAM A..D) (For Capture & above Display Mode=2)
+                            	    99: 		;20-21 A+B   Tile OBJ 1D-Boundary   (see Bit4)
+                            	   100: 		;22    A     Bitmap OBJ 1D-Boundary (see Bit5-6)
+                            	   101: 		;23    A+B   OBJ Processing during H-Blank (was located in Bit5 on GBA)
+                            	   102: 		;24-26 A     Character Base (in 64K steps) (merged with 16K step in BGxCNT)
+                            	   103: 		;27-29 A     Screen Base (in 64K steps) (merged with 2K step in BGxCNT)
+                            	   104: 		;30    A+B   BG Extended Palettes   (0=Disable, 1=Enable)
+                            	   105: 		;31    A+B   OBJ Extended Palettes  (0=Disable, 1=Enable)
+                            	   106: 	
+                            	   107: 	;4000240h - NDS9 - VRAMCNT_A - 8bit - VRAM-A (128K) Bank Control (W)
+                            	   108: 		;0-2   VRAM MST              ;Bit2 not used by VRAM-A,B,H,I
+                            	   109: 		;3-4   VRAM Offset (0-3)     ;Offset not used by VRAM-E,H,I
+                            	   110: 		;5-6   Not used
+                            	   111: 		;7     VRAM Enable (0=Disable, 1=Enable)
+                            	   112: 	
+                            	   113: 	.ifdef BuildNDS
+                            	   114: 		mov r0, #0x4000000
+                            	   115: 		add r0, r0, #0x304	;4000304h - NDS9 - POWCNT1 - Graphics Power Control Register (R/W)
+                            	   116: 		mov r1, #0x8003		;2D + Enable
+                            	   117: 		str r1, [r0]
+                            	   118: 
+                            	   119: 		mov r0, #0x04000000	;4000000h - DISPCNT - LCD Control (Read/Write)
+                            	   120: 		mov r1, #0x00010100
+                            	   121: 		str r1, [r0]		;2  Engine A only: VRAM Display (Bitmap from block selected in DISPCNT.18-19)
+                            	   122: 
+                            	   123: 		mov r0, #0x04000000
+                            	   124: 		add r0, r0, #0x240
+                            	   125: 		mov r1, #0x81		;Enable
+                            	   126: 		strb r1, [r0]		;4000240h - NDS9 - VRAMCNT_A - 8bit - VRAM-A (128K) Bank Control (W)
+                            	   127: 	.endif
+                            	   128: 
+                            	   129: 	
+                            	   130: ;GameBoy Advance
+                            	   131: 
+                            	   132: 	;4000000h - DISPCNT - LCD Control (Read/Write)
+                            	   133: 		;Bit   Expl.
+                            	   134: 		;0-2   BG Mode                (0-5=Video Mode 0-5, 6-7=Prohibited)
+                            	   135: 		;3     Reserved / CGB Mode    (0=GBA, 1=CGB; can be set only by BIOS opcodes)
+                            	   136: 		;4     Display Frame Select   (0-1=Frame 0-1) (for BG Modes 4,5 only)
+                            	   137: 		;5     H-Blank Interval Free  (1=Allow access to OAM during H-Blank)
+                            	   138: 		;6     OBJ Character VRAM Mapping (0=Two dimensional, 1=One dimensional)
+                            	   139: 		;7     Forced Blank           (1=Allow FAST access to VRAM,Palette,OAM)
+                            	   140: 		;8     Screen Display BG0  (0=Off, 1=On)
+                            	   141: 		;9     Screen Display BG1  (0=Off, 1=On)
+                            	   142: 		;10    Screen Display BG2  (0=Off, 1=On)
+                            	   143: 		;11    Screen Display BG3  (0=Off, 1=On)
+                            	   144: 		;12    Screen Display OBJ  (0=Off, 1=On)
+                            	   145: 		;13    Window 0 Display Flag   (0=Off, 1=On)
+                            	   146: 		;14    Window 1 Display Flag   (0=Off, 1=On)
+                            	   147: 		;15    OBJ Window Display Flag (0=Off, 1=On)
+                            	   148:  
+                            	   149: 
+                            	   150: 
+                            	   151: 
+                            	   152: 	.ifdef BuildGBA
+00:080000EC 0143A0E3        	   153: 		mov r4,#0x04000000  ;4000000h - DISPCNT - LCD Control (Read/Write)
+00:080000F0 012CA0E3        	   154: 		mov r2,#0x100    	;1= Layer 0 on / 0= ScreenMode 0
+00:080000F4 002084E5        	   155: 		str	r2,[r4]         			
+                            	   156: 	.endif
+                            	   157: 		
+                            	   158: ;4000008h - BG0CNT - BG0 Control (R/W) (BG Modes 0,1 only)	
+                            	   159: 	;Bit   Expl.
+                            	   160: 	;0-1   BG Priority           (0-3, 0=Highest)
+                            	   161: 	;2-3   Character Base Block  (0-3, in units of 16 KBytes) (=BG Tile Data)
+                            	   162: 	;4-5   Not used (must be zero) (except in NDS mode: MSBs of char base)
+                            	   163: 	;6     Mosaic                (0=Disable, 1=Enable)
+                            	   164: 	;7     Colors/Palettes       (0=16/16, 1=256/1)
+                            	   165: 	;8-12  Screen Base Block     (0-31, in units of 2 KBytes) (=BG Map Data)
+                            	   166: 	;13    BG0/BG1: Not used (except in NDS mode: Ext Palette Slot for BG0/BG1)
+                            	   167: 	;13    BG2/BG3: Display Area Overflow (0=Transparent, 1=Wraparound)
+                            	   168: 	;14-15 Screen Size (0-3)
+                            	   169: 
+                            	   170: 	
+00:080000F8 0143A0E3        	   171: 	mov r4,#0x04000000 	;4000008h - BG0CNT - BG0 Control (R/W) (BG Modes 0,1 only)
+00:080000FC 084084E2        	   172: 	add r4,r4,#0x08
+                            	   173: 	
+00:08000100 0129A0E3042082E3	   174: 	mov r2,#0x4004   		;$---4 = Patten Base address=0x06004000 	
+00:08000108 002084E5        	   175: 	str	r2,[r4]    				;$4--- = ScreenSize=64x32 tilemap
+                            	   176: 			
+                            	   177: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                            	   178: 
+                            	   179: 	
+                            	   180: 	
+00:0800010C 491F8FE2        	   181: 	adr r1,Palettes			;Define palettes
+00:08000110 0524A0E3        	   182: 	mov r2,#0x05000000			;-BBBBBGGGGGRRRRR
+00:08000114 2030A0E3        	   183: 	mov r3,#16*2			;2 bytes per color
+00:08000118 400000EB        	   184: 	bl LDIR16
+                            	   185: 
+00:0800011C 4D1F8FE2        	   186: 	adr r1,TilePatterns		;Define Tilepatterns
+00:08000120 0129A0E3062482E3	   187: 	mov r2,#0x06004000
+00:08000128 093DA0E3        	   188: 	mov r3,#TilePatterns_End-TilePatterns
+00:0800012C 3B0000EB        	   189: 	bl LDIR16
+                            	   190: 	
+                            	   191: 
+                            	   192: ;Screen uses 2x 32x32 tilemaps to make 1x 64x32 tilemap	
+                            	   193: 	
+00:08000130 361E8FE2        	   194: 	adr r1,Tilemap			;PPPPVHTTTTTTTTTT
+                            	   195: 								;P=Palette HV=HV flip T=Tilenum
+                            	   196: 								
+00:08000134 0624A0E3        	   197: 	mov r2,#0x06000000		;SC0 (32x32 Left Tiles)
+00:08000138 023BA0E3        	   198: 	mov r3,#32*32*2			;2 bytes per tile
+00:0800013C 370000EB        	   199: 	bl LDIR16
+                            	   200: 
+00:08000140 351E8FE2        	   201: 	adr r1,Tilemap
+00:08000144 022BA0E3062482E3	   202: 	mov r2,#0x06000800		;SC1 (32x32 Right Tiles)
+00:0800014C 023BA0E3        	   203: 	mov r3,#32*32*2			;2 bytes per tile
+00:08000150 320000EB        	   204: 	bl LDIR16
+                            	   205: 	
+                            	   206: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                            	   207: 
+00:08000154 DC108FE2        	   208: 	adr r1,Palettes
+00:08000158 022CA0E3052482E3	   209: 	mov r2,#0x05000200			;Sprite Palettes
+00:08000160 2030A0E3        	   210: 	mov r3,#16*2
+00:08000164 2D0000EB        	   211: 	bl LDIR16
+                            	   212: 	
+                            	   213: 	.ifdef BuildGBA
+00:08000168 0128A0E3062482E3	   214: 		mov r2,#0x06010000		;Sprite Pattern Ram
+                            	   215: 	.endif
+                            	   216: 	
+                            	   217: 	.ifdef BuildNDS
+                            	   218: 		mov r0, #0x4000000
+                            	   219: 		add r0, r0, #0x241
+                            	   220: 		mov r1, #0x82	;Turn on Sprite RAM
+                            	   221: 		strb r1, [r0]	;4000241h - NDS9 - VRAMCNT_B - 8bit - VRAM-B (128K) Bank Control (W)
+                            	   222: 	
+                            	   223: 		mov r2,#0x06400000		;Sprite Pattern Ram
+                            	   224: 	.endif
+                            	   225: 	
+00:08000170 E0108FE2        	   226: 	adr r1,TilePatterns
+00:08000174 093DA0E3        	   227: 	mov r3,#TilePatterns_End-TilePatterns
+00:08000178 280000EB        	   228: 	bl LDIR16					;Transfer Sprite patterns to Vram
+                            	   229: 	
+                            	   230: 	.ifdef BuildGBA
+00:0800017C 0143A0E3        	   231: 		mov r4,#0x04000000  ;DISPCNT -LCD Control
+00:08000180 452DA0E3        	   232: 		mov r2,#0x1140    	;1= Sprite on / 1= Layer 0 on / 4= 1D Tile layout 
+00:08000184 002084E5        	   233: 		str	r2,[r4]         	;0= ScreenMode 0 
+                            	   234: 	.endif
+                            	   235: 	
+                            	   236: 	.ifdef BuildNDS
+                            	   237: 		mov r0, #0x04000000	;4000000h - DISPCNT - LCD Control (Read/Write)
+                            	   238: 		mov r1, #0x00011110
+                            	   239: 		str r1, [r0]		;1=Display On / 1= Sprite on / 1= Layer 0 on
+                            	   240: 	.endif							;1= 1D Tile layout / 0= ScreenMode 0 
+                            	   241: 
+                            	   242: ;4000000h - GBA DISPCNT - LCD Control (Read/Write)
+                            	   243:   ;Bit   Expl.
+                            	   244:   ;0-2   BG Mode                (0-5=Video Mode 0-5, 6-7=Prohibited)
+                            	   245:   ;3     Reserved / CGB Mode    (0=GBA, 1=CGB; can be set only by BIOS opcodes)
+                            	   246:   ;4     Display Frame Select   (0-1=Frame 0-1) (for BG Modes 4,5 only)
+                            	   247:   ;5     H-Blank Interval Free  (1=Allow access to OAM during H-Blank)
+                            	   248:   ;6     OBJ Character VRAM Mapping (0=Two dimensional, 1=One dimensional)
+                            	   249:   ;7     Forced Blank           (1=Allow FAST access to VRAM,Palette,OAM)
+                            	   250:   ;8     Screen Display BG0  (0=Off, 1=On)
+                            	   251:   ;9     Screen Display BG1  (0=Off, 1=On)
+                            	   252:   ;10    Screen Display BG2  (0=Off, 1=On)
+                            	   253:   ;11    Screen Display BG3  (0=Off, 1=On)
+                            	   254:   ;12    Screen Display OBJ  (0=Off, 1=On)
+                            	   255:   ;13    Window 0 Display Flag   (0=Off, 1=On)
+                            	   256:   ;14    Window 1 Display Flag   (0=Off, 1=On)
+                            	   257:   ;15    OBJ Window Display Flag (0=Off, 1=On)
+                            	   258: 
+                            	   259:  
+                            	   260:  
+                            	   261: ;4000000h - NDS DISPCNT - LCD Control (Read/Write)
+                            	   262: ; Bit  Engine Expl.
+                            	   263:  ; 0-2   A+B   BG Mode
+                            	   264:  ; 3     A     BG0 2D/3D Selection (instead CGB Mode) (0=2D, 1=3D)
+                            	   265:  ; 4     A+B   Tile OBJ Mapping        (0=2D; max 32KB, 1=1D; max 32KB..256KB)
+                            	   266:  ; 5     A+B   Bitmap OBJ 2D-Dimension (0=128x512 dots, 1=256x256 dots)
+                            	   267:  ; 6     A+B   Bitmap OBJ Mapping      (0=2D; max 128KB, 1=1D; max 128KB..256KB)
+                            	   268:  ; 7-15  A+B   Same as GBA
+                            	   269:  ; 16-17 A+B   Display Mode (Engine A: 0..3, Engine B: 0..1, GBA: Green Swap)
+                            	   270:  ; 18-19 A     VRAM block (0..3=VRAM A..D) (For Capture & above Display Mode=2)
+                            	   271: ;  20-21 A+B   Tile OBJ 1D-Boundary   (see Bit4)
+                            	   272: ;  22    A     Bitmap OBJ 1D-Boundary (see Bit5-6)
+                            	   273: ;  23    A+B   OBJ Processing during H-Blank (was located in Bit5 on GBA)
+                            	   274: ;  24-26 A     Character Base (in 64K steps) (merged with 16K step in BGxCNT)
+                            	   275: ;  27-29 A     Screen Base (in 64K steps) (merged with 2K step in BGxCNT)
+                            	   276: ;  30    A+B   BG Extended Palettes   (0=Disable, 1=Enable)
+                            	   277: ;  31    A+B   OBJ Extended Palettes  (0=Disable, 1=Enable)
+                            	   278: 
+                            	   279: 
+                            	   280: 
+                            	   281: 	
+                            	   282: ;16 color sprite 2x2 tile
+                            	   283: 	
+00:08000188 0100A0E3        	   284: 	mov r0,#0x01	   		;Sprite Num
+                            	   285: ;S=Shape (Square /HRect / Vrect)  C=Colors(16/256)  M=Mosiac  
+                            	   286: ;T=Transparent  D=Disable/Doublesize  R=Rotation  Y=Ypos
+                            	   287: 			; SSCMTTDRYYYYYYYY
+00:0800018C 6010A0E3        	   288: 	mov r1,#0b0000000001100000		;Ypos
+                            	   289: 	
+                            	   290: ;S=Obj Size  VH=V/HFlip  R=Rotation parameter  X=Xpos
+                            	   291: 			; SSVHRRRXXXXXXXXX
+00:08000190 0129A0E3C02082E3	   292: 	mov r2,#0b0100000011000000		;Xpos
+                            	   293: 	
+                            	   294: ;C=Color palette   P=Priority   T=Tile Number
+                            	   295: 			; CCCCPPTTTTTTTTTT
+00:08000198 0630A0E3        	   296: 	mov r3,#0b0000000000000110   	;Tile
+00:0800019C 160000EB        	   297: 	bl SetSprite
+                            	   298: 
+                            	   299: ;16 color sprite (Wide 2x1 using tile patterns)
+00:080001A0 0200A0E3        	   300: 	mov r0,#0x02	   		;Sprite Num
+00:080001A4 0119A0E3201081E3	   301: 	mov r1,#0x4020   		;Ypos
+00:080001AC 4020A0E3        	   302: 	mov r2,#0x0040   		;Xpos
+00:080001B0 0130A0E3        	   303: 	mov r3,#0x0001   		;Tile
+00:080001B4 100000EB        	   304: 	bl SetSprite
+                            	   305: 	
+                            	   306: ;256 color sprite
+00:080001B8 0000A0E3        	   307: 	mov r0,#0x00	   		;Sprite Num
+00:080001BC 021AA0E3301081E3	   308: 	mov r1,#0x2030   		;Ypos
+00:080001C4 0129A0E3602082E3	   309: 	mov r2,#0x4060   		;Xpos	4=256 color
+00:080001CC 0A30A0E3        	   310: 	mov r3,#0x000A   		;Tile 
+00:080001D0 090000EB        	   311: 	bl SetSprite	
+                            	   312: ;(each 256 color tile takes 2x 16 color ones)
+                            	   313: 	
+                            	   314: 	
+                            	   315: InfLoop:
+                            	   316: 	
+                            	   317: 	
+00:080001D4 0143A0E3        	   318: 	mov r4,#0x04000000  
+00:080001D8 104084E2        	   319: 	add r4,r4,#0x10		;4000010h - BG0HOFS - BG0 X-Offset (W)
+00:080001DC B02044E1        	   320: 	strh	r2,[r4]    
+00:080001E0 024084E2        	   321: 	add r4,r4,#0x02		;4000012h - BG0VOFS - BG0 Y-Offset (W)
+00:080001E4 B02044E1        	   322: 	strh	r2,[r4]    
+                            	   323: 	
+00:080001E8 012082E2        	   324: 	add r2,r2,#1
+                            	   325: 	
+                            	   326: 	.ifdef BuildGBA
+00:080001EC 0138A0E3        	   327: 		mov r3,#0x10000
+                            	   328: 	.endif
+                            	   329: 	.ifdef BuildNDS
+                            	   330: 		mov r3,#0x100000
+                            	   331: 	.endif
+                            	   332: 	
+                            	   333: Delay:	
+00:080001F0 013053E2        	   334: 	subs r3,r3,#1
+00:080001F4 FDFFFF1A        	   335: 	bne Delay
+                            	   336: 	
+00:080001F8 F5FFFFEA        	   337:     b InfLoop			;Halt
+                            	   338: 	
+                            	   339: 	
+                            	   340: 
+                            	   341: 	
+                            	   342: SetSprite:	;Set Sprite R0... Set Attribute words 1,2,3 to R1,R2,R3
+00:080001FC FF5F2DE9        	   343: 	STMFD sp!,{r0-r12, lr}
+                            	   344: 	
+00:08000200 0744A0E3        	   345: 		mov r4,#0x07000000  	;Sprite (OAM) settings
+00:08000204 804184E0        	   346: 		add r4,r4,r0,asl #3		;8 bytes per sprite (6 used)	
+                            	   347: 		
+                            	   348: 		;S=Shape (Square /HRect / Vrect)  C=Colors(16/256)  M=Mosiac  
+                            	   349: 		;T=Transparent  D=Disable/Doublesize  R=Rotation  Y=Ypos
+00:08000208 B01044E1        	   350: 		strH	r1,[r4]    		;1st attrib - SSCMTTDRYYYYYYYY
+                            	   351: 			
+00:0800020C 024084E2        	   352: 		add r4,r4,#2
+                            	   353: 		
+                            	   354: 		;S=Obj Size  VH=V/HFlip  R=Rotation parameter  X=Xpos
+00:08000210 B02044E1        	   355: 		strH	r2,[r4]    		;2nd attrib - SSVHRRRXXXXXXXXX
+                            	   356: 		
+00:08000214 024084E2        	   357: 		add r4,r4,#2
+                            	   358: 		
+                            	   359: 		;C=Color palette   P=Priority   T=Tile Number
+00:08000218 B03044E1        	   360: 		strH	r3,[r4]    		;3rd attrib - CCCCPPTTTTTTTTTT
+                            	   361: 	
+00:0800021C FF9FBDE8        	   362: 	LDMFD sp!,{r0-r12, pc}	
+                            	   363: 		
+                            	   364: 		
+                            	   365: 	
+                            	   366: 	
+                            	   367: LDIR16:			;Transfer R3 bytes from [R1] to [R2]
+00:08000220 FF5F2DE9        	   368: 	STMFD sp!,{r0-r12, lr}
+                            	   369: LDIR16B:	
+00:08000224 B250D1E0        	   370: 		ldrH r5,[r1],#2
+00:08000228 B250C2E0        	   371: 		strH r5,[r2],#2	
+                            	   372: 		
+00:0800022C 023053E2        	   373: 		subs r3, r3, #2		
+00:08000230 FBFFFF1A        	   374: 		bne LDIR16B	
+00:08000234 FF9FBDE8        	   375: 	LDMFD sp!,{r0-r12, pc}	
+                            	   376: 
+                            	   377: 	
+                            	   378: 	
+                            	   379: 			
+                            	   380: 	
+                            	   381: Palettes:
+00:08000238 0000            	   382:     .word 0b0000000000000000; ;0  %-BBBBBGGGGGRRRRR
+00:0800023A 4A29            	   383:     .word 0b0010100101001010; ;1  %-BBBBBGGGGGRRRRR
+00:0800023C B556            	   384:     .word 0b0101011010110101; ;2  %-BBBBBGGGGGRRRRR
+00:0800023E FF7F            	   385:     .word 0b0111111111111111; ;3  %-BBBBBGGGGGRRRRR
+00:08000240 0040            	   386:     .word 0b0100000000000000; ;4  %-BBBBBGGGGGRRRRR
+00:08000242 1040            	   387:     .word 0b0100000000010000; ;5  %-BBBBBGGGGGRRRRR
+00:08000244 0042            	   388:     .word 0b0100001000000000; ;6  %-BBBBBGGGGGRRRRR
+00:08000246 934F            	   389:     .word 0b0100111110010011; ;7  %-BBBBBGGGGGRRRRR
+00:08000248 107C            	   390:     .word 0b0111110000010000; ;8  %-BBBBBGGGGGRRRRR
+00:0800024A 1F00            	   391:     .word 0b0000000000011111; ;9  %-BBBBBGGGGGRRRRR
+00:0800024C E003            	   392:     .word 0b0000001111100000; ;10  %-BBBBBGGGGGRRRRR
+00:0800024E FF03            	   393:     .word 0b0000001111111111; ;11  %-BBBBBGGGGGRRRRR
+00:08000250 007C            	   394:     .word 0b0111110000000000; ;12  %-BBBBBGGGGGRRRRR
+00:08000252 1F7C            	   395:     .word 0b0111110000011111; ;13  %-BBBBBGGGGGRRRRR
+00:08000254 E07F            	   396:     .word 0b0111111111100000; ;14  %-BBBBBGGGGGRRRRR
+00:08000256 FF7F            	   397: 	.word 0b0111111111111111; ;15  %-BBBBBGGGGGRRRRR
+                            	   398: 	
+                            	   399: 	
+                            	   400: ;Same format as MSX2 (linear data not bitplanes)
+                            	   401: 	
+                            	   402: TilePatterns:	
+00:08000258 CCCCCCCCCCCCCCCC	   403: 	.incbin "TilesGBA16color.raw"
+00:08000260 CCCCCCCCCCCCCCCC
+00:08000268 CCCCCCCCCCCCCCCC
+00:08000270 CCCCCCCCCCCCCCCC
+00:08000278 CCCCCCCCCCBCCCCC
+00:08000280 CCBBCBCCBCBBBBCC
+00:08000288 CCBBCBCCCCBCCCCC
+00:08000290 CCCCCCCCCCCCCCCC
+00:08000298 11111111D1DDDD1D
+00:080002A0 D111111DD1D1111D
+00:080002A8 D1111D1DD111111D
+00:080002B0 D1DDDD1D11111111
+00:080002B8 CCCCCCCCCCCCCCCC
+00:080002C0 CCCC2CC2CC2C2222
+00:080002C8 C22222AA22A22222
+00:080002D0 A2222AA222222222
+00:080002D8 2C2222C2222A2222
+00:080002E0 22AA222A22A2A222
+00:080002E8 222A22222222A22A
+00:080002F0 222A22222C2222C2
+00:080002F8 CCCCCCCCCC9CC9CC
+00:08000300 C99999CCC999C9CC
+00:08000308 C99CCCCC999999CC
+00:08000310 C99CCCCCCCC9C9CC
+00:08000318 5507001355003310	   404: 	.incbin "HSpriteGBA.RAW"
+00:08000320 0730001000030000
+00:08000328 3000000030000040
+00:08000330 0300004011014004
+00:08000338 3100602201330022
+00:08000340 0100036000003000
+00:08000348 0000000304000003
+00:08000350 0400003040041011
+00:08000358 1101400403000040
+00:08000360 3000004030000000
+00:08000368 0003000006300010
+00:08000370 2200331022060013
+00:08000378 4004101104000030
+00:08000380 0400000300000003
+00:08000388 0000300001000370
+00:08000390 0133005531007055
+00:08000398 0505070000000301	   405: 	.incbin "HSpriteGBA_256.RAW"
+00:080003A0 0505000003030001
+00:080003A8 0700000300000001
+00:080003B0 0000030000000000
+00:080003B8 0003000000000000
+00:080003C0 0003000000000004
+00:080003C8 0300000000000004
+00:080003D0 0101010000040400
+00:080003D8 0103000000060202
+00:080003E0 0100030300000202
+00:080003E8 0100000003000006
+00:080003F0 0000000000030000
+00:080003F8 0000000000000300
+00:08000400 0400000000000300
+00:08000408 0400000000000003
+00:08000410 0004040000010101
+00:08000418 0101010000040400
+00:08000420 0300000000000004
+00:08000428 0003000000000004
+00:08000430 0003000000000000
+00:08000438 0000030000000000
+00:08000440 0600000300000001
+00:08000448 0202000003030001
+00:08000450 0202060000000301
+00:08000458 0004040000010101
+00:08000460 0400000000000003
+00:08000468 0400000000000300
+00:08000470 0000000000000300
+00:08000478 0000000000030000
+00:08000480 0100000003000007
+00:08000488 0100030300000505
+00:08000490 0103000000070505
+                            	   406: TilePatterns_End:	
+                            	   407: 
+                            	   408: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                            	   409: 
+                            	   410: Tilemap:	;Tile numbers 32*32 - PPPPVHTTTTTTTTTT
+00:08000498 0000            	   411: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800049A 0000
+00:0800049C 0000
+00:0800049E 0000
+00:080004A0 0000
+00:080004A2 0000
+00:080004A4 0000
+00:080004A6 0000
+00:080004A8 0000
+00:080004AA 0000
+00:080004AC 0000
+00:080004AE 0000
+00:080004B0 0000
+00:080004B2 0000
+00:080004B4 0000
+00:080004B6 0000
+00:080004B8 0000
+00:080004BA 0000
+00:080004BC 0000
+00:080004BE 0000
+00:080004C0 0000
+00:080004C2 0000
+00:080004C4 0000
+00:080004C6 0000
+00:080004C8 0000
+00:080004CA 0000
+00:080004CC 0000
+00:080004CE 0000
+00:080004D0 0000
+00:080004D2 0000
+00:080004D4 0000
+00:080004D6 0000
+00:080004D8 0000            	   412: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:080004DA 0000
+00:080004DC 0000
+00:080004DE 0000
+00:080004E0 0000
+00:080004E2 0000
+00:080004E4 0000
+00:080004E6 0000
+00:080004E8 0000
+00:080004EA 0000
+00:080004EC 0000
+00:080004EE 0000
+00:080004F0 0000
+00:080004F2 0000
+00:080004F4 0000
+00:080004F6 0000
+00:080004F8 0000
+00:080004FA 0000
+00:080004FC 0000
+00:080004FE 0000
+00:08000500 0000
+00:08000502 0000
+00:08000504 0000
+00:08000506 0000
+00:08000508 0000
+00:0800050A 0000
+00:0800050C 0000
+00:0800050E 0000
+00:08000510 0000
+00:08000512 0000
+00:08000514 0000
+00:08000516 0000
+00:08000518 0000            	   413: 	.word 0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800051A 0000
+00:0800051C 0000
+00:0800051E 0000
+00:08000520 0100
+00:08000522 0000
+00:08000524 0000
+00:08000526 0000
+00:08000528 0000
+00:0800052A 0000
+00:0800052C 0000
+00:0800052E 0000
+00:08000530 0000
+00:08000532 0000
+00:08000534 0000
+00:08000536 0000
+00:08000538 0000
+00:0800053A 0000
+00:0800053C 0000
+00:0800053E 0000
+00:08000540 0000
+00:08000542 0000
+00:08000544 0000
+00:08000546 0000
+00:08000548 0000
+00:0800054A 0000
+00:0800054C 0000
+00:0800054E 0000
+00:08000550 0000
+00:08000552 0000
+00:08000554 0000
+00:08000556 0000
+00:08000558 0000            	   414: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800055A 0000
+00:0800055C 0000
+00:0800055E 0000
+00:08000560 0000
+00:08000562 0000
+00:08000564 0000
+00:08000566 0000
+00:08000568 0000
+00:0800056A 0000
+00:0800056C 0000
+00:0800056E 0000
+00:08000570 0000
+00:08000572 0000
+00:08000574 0000
+00:08000576 0000
+00:08000578 0100
+00:0800057A 0000
+00:0800057C 0000
+00:0800057E 0000
+00:08000580 0000
+00:08000582 0000
+00:08000584 0000
+00:08000586 0000
+00:08000588 0000
+00:0800058A 0000
+00:0800058C 0000
+00:0800058E 0000
+00:08000590 0000
+00:08000592 0000
+00:08000594 0000
+00:08000596 0000
+00:08000598 0000            	   415: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0
+00:0800059A 0000
+00:0800059C 0000
+00:0800059E 0000
+00:080005A0 0000
+00:080005A2 0000
+00:080005A4 0000
+00:080005A6 0000
+00:080005A8 0000
+00:080005AA 0000
+00:080005AC 0000
+00:080005AE 0000
+00:080005B0 0000
+00:080005B2 0000
+00:080005B4 0000
+00:080005B6 0000
+00:080005B8 0000
+00:080005BA 0000
+00:080005BC 0000
+00:080005BE 0000
+00:080005C0 0000
+00:080005C2 0000
+00:080005C4 0000
+00:080005C6 0000
+00:080005C8 0000
+00:080005CA 0000
+00:080005CC 0100
+00:080005CE 0000
+00:080005D0 0000
+00:080005D2 0000
+00:080005D4 0000
+00:080005D6 0000
+00:080005D8 0000            	   416: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:080005DA 0000
+00:080005DC 0000
+00:080005DE 0000
+00:080005E0 0000
+00:080005E2 0000
+00:080005E4 0000
+00:080005E6 0000
+00:080005E8 0000
+00:080005EA 0000
+00:080005EC 0000
+00:080005EE 0000
+00:080005F0 0000
+00:080005F2 0000
+00:080005F4 0000
+00:080005F6 0000
+00:080005F8 0000
+00:080005FA 0000
+00:080005FC 0000
+00:080005FE 0000
+00:08000600 0000
+00:08000602 0000
+00:08000604 0000
+00:08000606 0000
+00:08000608 0000
+00:0800060A 0000
+00:0800060C 0000
+00:0800060E 0000
+00:08000610 0000
+00:08000612 0000
+00:08000614 0000
+00:08000616 0000
+00:08000618 0000            	   417: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800061A 0000
+00:0800061C 0000
+00:0800061E 0000
+00:08000620 0000
+00:08000622 0000
+00:08000624 0000
+00:08000626 0000
+00:08000628 0000
+00:0800062A 0000
+00:0800062C 0000
+00:0800062E 0000
+00:08000630 0000
+00:08000632 0000
+00:08000634 0000
+00:08000636 0000
+00:08000638 0000
+00:0800063A 0000
+00:0800063C 0000
+00:0800063E 0000
+00:08000640 0000
+00:08000642 0000
+00:08000644 0000
+00:08000646 0000
+00:08000648 0000
+00:0800064A 0000
+00:0800064C 0000
+00:0800064E 0000
+00:08000650 0000
+00:08000652 0000
+00:08000654 0000
+00:08000656 0000
+00:08000658 0000            	   418: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800065A 0000
+00:0800065C 0000
+00:0800065E 0000
+00:08000660 0000
+00:08000662 0000
+00:08000664 0000
+00:08000666 0000
+00:08000668 0000
+00:0800066A 0000
+00:0800066C 0000
+00:0800066E 0000
+00:08000670 0000
+00:08000672 0000
+00:08000674 0000
+00:08000676 0000
+00:08000678 0000
+00:0800067A 0000
+00:0800067C 0000
+00:0800067E 0000
+00:08000680 0000
+00:08000682 0000
+00:08000684 0000
+00:08000686 0000
+00:08000688 0000
+00:0800068A 0000
+00:0800068C 0000
+00:0800068E 0000
+00:08000690 0000
+00:08000692 0000
+00:08000694 0000
+00:08000696 0000
+00:08000698 0000            	   419: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800069A 0000
+00:0800069C 0000
+00:0800069E 0000
+00:080006A0 0000
+00:080006A2 0000
+00:080006A4 0000
+00:080006A6 0000
+00:080006A8 0000
+00:080006AA 0000
+00:080006AC 0000
+00:080006AE 0000
+00:080006B0 0000
+00:080006B2 0000
+00:080006B4 0000
+00:080006B6 0000
+00:080006B8 0000
+00:080006BA 0000
+00:080006BC 0000
+00:080006BE 0000
+00:080006C0 0000
+00:080006C2 0000
+00:080006C4 0000
+00:080006C6 0000
+00:080006C8 0000
+00:080006CA 0000
+00:080006CC 0000
+00:080006CE 0000
+00:080006D0 0000
+00:080006D2 0000
+00:080006D4 0000
+00:080006D6 0000
+00:080006D8 0000            	   420: 	.word 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:080006DA 0000
+00:080006DC 0000
+00:080006DE 0100
+00:080006E0 0000
+00:080006E2 0000
+00:080006E4 0000
+00:080006E6 0000
+00:080006E8 0000
+00:080006EA 0000
+00:080006EC 0000
+00:080006EE 0000
+00:080006F0 0000
+00:080006F2 0000
+00:080006F4 0000
+00:080006F6 0100
+00:080006F8 0000
+00:080006FA 0000
+00:080006FC 0000
+00:080006FE 0000
+00:08000700 0000
+00:08000702 0000
+00:08000704 0000
+00:08000706 0000
+00:08000708 0000
+00:0800070A 0000
+00:0800070C 0000
+00:0800070E 0000
+00:08000710 0000
+00:08000712 0000
+00:08000714 0000
+00:08000716 0000
+00:08000718 0000            	   421: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800071A 0000
+00:0800071C 0000
+00:0800071E 0000
+00:08000720 0000
+00:08000722 0000
+00:08000724 0000
+00:08000726 0000
+00:08000728 0000
+00:0800072A 0000
+00:0800072C 0000
+00:0800072E 0000
+00:08000730 0000
+00:08000732 0000
+00:08000734 0000
+00:08000736 0000
+00:08000738 0000
+00:0800073A 0000
+00:0800073C 0000
+00:0800073E 0000
+00:08000740 0000
+00:08000742 0000
+00:08000744 0000
+00:08000746 0000
+00:08000748 0000
+00:0800074A 0000
+00:0800074C 0000
+00:0800074E 0000
+00:08000750 0000
+00:08000752 0000
+00:08000754 0000
+00:08000756 0000
+00:08000758 0000            	   422: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800075A 0000
+00:0800075C 0000
+00:0800075E 0000
+00:08000760 0000
+00:08000762 0000
+00:08000764 0000
+00:08000766 0000
+00:08000768 0000
+00:0800076A 0000
+00:0800076C 0000
+00:0800076E 0000
+00:08000770 0000
+00:08000772 0000
+00:08000774 0000
+00:08000776 0000
+00:08000778 0000
+00:0800077A 0000
+00:0800077C 0000
+00:0800077E 0000
+00:08000780 0000
+00:08000782 0000
+00:08000784 0000
+00:08000786 0000
+00:08000788 0000
+00:0800078A 0000
+00:0800078C 0000
+00:0800078E 0000
+00:08000790 0000
+00:08000792 0000
+00:08000794 0000
+00:08000796 0000
+00:08000798 0000            	   423: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800079A 0000
+00:0800079C 0000
+00:0800079E 0000
+00:080007A0 0000
+00:080007A2 0000
+00:080007A4 0000
+00:080007A6 0000
+00:080007A8 0000
+00:080007AA 0000
+00:080007AC 0000
+00:080007AE 0000
+00:080007B0 0000
+00:080007B2 0000
+00:080007B4 0000
+00:080007B6 0000
+00:080007B8 0000
+00:080007BA 0000
+00:080007BC 0000
+00:080007BE 0000
+00:080007C0 0000
+00:080007C2 0000
+00:080007C4 0000
+00:080007C6 0000
+00:080007C8 0000
+00:080007CA 0000
+00:080007CC 0000
+00:080007CE 0000
+00:080007D0 0000
+00:080007D2 0000
+00:080007D4 0000
+00:080007D6 0000
+00:080007D8 0000            	   424: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0
+00:080007DA 0000
+00:080007DC 0000
+00:080007DE 0000
+00:080007E0 0000
+00:080007E2 0000
+00:080007E4 0000
+00:080007E6 0000
+00:080007E8 0000
+00:080007EA 0000
+00:080007EC 0000
+00:080007EE 0000
+00:080007F0 0000
+00:080007F2 0000
+00:080007F4 0000
+00:080007F6 0000
+00:080007F8 0000
+00:080007FA 0000
+00:080007FC 0000
+00:080007FE 0000
+00:08000800 0000
+00:08000802 0000
+00:08000804 0000
+00:08000806 0000
+00:08000808 0000
+00:0800080A 0000
+00:0800080C 0000
+00:0800080E 0000
+00:08000810 0000
+00:08000812 0000
+00:08000814 0100
+00:08000816 0000
+00:08000818 0000            	   425: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800081A 0000
+00:0800081C 0000
+00:0800081E 0000
+00:08000820 0000
+00:08000822 0000
+00:08000824 0000
+00:08000826 0000
+00:08000828 0000
+00:0800082A 0000
+00:0800082C 0000
+00:0800082E 0000
+00:08000830 0000
+00:08000832 0000
+00:08000834 0000
+00:08000836 0000
+00:08000838 0000
+00:0800083A 0000
+00:0800083C 0000
+00:0800083E 0000
+00:08000840 0000
+00:08000842 0000
+00:08000844 0000
+00:08000846 0000
+00:08000848 0000
+00:0800084A 0000
+00:0800084C 0000
+00:0800084E 0000
+00:08000850 0000
+00:08000852 0000
+00:08000854 0000
+00:08000856 0000
+00:08000858 0000            	   426: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800085A 0000
+00:0800085C 0000
+00:0800085E 0000
+00:08000860 0000
+00:08000862 0000
+00:08000864 0000
+00:08000866 0000
+00:08000868 0000
+00:0800086A 0000
+00:0800086C 0000
+00:0800086E 0000
+00:08000870 0000
+00:08000872 0000
+00:08000874 0000
+00:08000876 0000
+00:08000878 0000
+00:0800087A 0000
+00:0800087C 0000
+00:0800087E 0000
+00:08000880 0000
+00:08000882 0000
+00:08000884 0000
+00:08000886 0000
+00:08000888 0000
+00:0800088A 0000
+00:0800088C 0000
+00:0800088E 0000
+00:08000890 0000
+00:08000892 0000
+00:08000894 0000
+00:08000896 0000
+00:08000898 0000            	   427: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800089A 0000
+00:0800089C 0000
+00:0800089E 0000
+00:080008A0 0000
+00:080008A2 0000
+00:080008A4 0000
+00:080008A6 0000
+00:080008A8 0000
+00:080008AA 0000
+00:080008AC 0000
+00:080008AE 0000
+00:080008B0 0000
+00:080008B2 0000
+00:080008B4 0000
+00:080008B6 0000
+00:080008B8 0000
+00:080008BA 0000
+00:080008BC 0000
+00:080008BE 0000
+00:080008C0 0000
+00:080008C2 0000
+00:080008C4 0000
+00:080008C6 0000
+00:080008C8 0000
+00:080008CA 0000
+00:080008CC 0000
+00:080008CE 0000
+00:080008D0 0000
+00:080008D2 0000
+00:080008D4 0000
+00:080008D6 0000
+00:080008D8 0000            	   428: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+00:080008DA 0000
+00:080008DC 0000
+00:080008DE 0000
+00:080008E0 0000
+00:080008E2 0000
+00:080008E4 0000
+00:080008E6 0000
+00:080008E8 0000
+00:080008EA 0000
+00:080008EC 0000
+00:080008EE 0000
+00:080008F0 0000
+00:080008F2 0000
+00:080008F4 0000
+00:080008F6 0000
+00:080008F8 0000
+00:080008FA 0000
+00:080008FC 0000
+00:080008FE 0000
+00:08000900 0000
+00:08000902 0000
+00:08000904 0000
+00:08000906 0000
+00:08000908 0000
+00:0800090A 0000
+00:0800090C 0000
+00:0800090E 0000
+00:08000910 0100
+00:08000912 0000
+00:08000914 0000
+00:08000916 0000
+00:08000918 0000            	   429: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800091A 0000
+00:0800091C 0000
+00:0800091E 0000
+00:08000920 0000
+00:08000922 0000
+00:08000924 0000
+00:08000926 0000
+00:08000928 0000
+00:0800092A 0000
+00:0800092C 0000
+00:0800092E 0000
+00:08000930 0000
+00:08000932 0000
+00:08000934 0000
+00:08000936 0000
+00:08000938 0000
+00:0800093A 0000
+00:0800093C 0000
+00:0800093E 0000
+00:08000940 0000
+00:08000942 0000
+00:08000944 0000
+00:08000946 0000
+00:08000948 0000
+00:0800094A 0000
+00:0800094C 0000
+00:0800094E 0000
+00:08000950 0000
+00:08000952 0000
+00:08000954 0000
+00:08000956 0000
+00:08000958 0000            	   430: 	.word 0,2,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,2,0,0,0,0,0,0,0,2,0,0,2,0,0,0
+00:0800095A 0200
+00:0800095C 0000
+00:0800095E 0000
+00:08000960 0000
+00:08000962 0000
+00:08000964 0000
+00:08000966 0000
+00:08000968 0000
+00:0800096A 0000
+00:0800096C 0000
+00:0800096E 0200
+00:08000970 0000
+00:08000972 0000
+00:08000974 0200
+00:08000976 0000
+00:08000978 0000
+00:0800097A 0200
+00:0800097C 0000
+00:0800097E 0000
+00:08000980 0000
+00:08000982 0000
+00:08000984 0000
+00:08000986 0000
+00:08000988 0000
+00:0800098A 0200
+00:0800098C 0000
+00:0800098E 0000
+00:08000990 0200
+00:08000992 0000
+00:08000994 0000
+00:08000996 0000
+00:08000998 0000            	   431: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:0800099A 0000
+00:0800099C 0000
+00:0800099E 0000
+00:080009A0 0000
+00:080009A2 0000
+00:080009A4 0000
+00:080009A6 0000
+00:080009A8 0000
+00:080009AA 0000
+00:080009AC 0000
+00:080009AE 0000
+00:080009B0 0000
+00:080009B2 0000
+00:080009B4 0000
+00:080009B6 0000
+00:080009B8 0000
+00:080009BA 0000
+00:080009BC 0000
+00:080009BE 0000
+00:080009C0 0000
+00:080009C2 0000
+00:080009C4 0000
+00:080009C6 0000
+00:080009C8 0000
+00:080009CA 0000
+00:080009CC 0000
+00:080009CE 0000
+00:080009D0 0000
+00:080009D2 0000
+00:080009D4 0000
+00:080009D6 0000
+00:080009D8 0000            	   432: 	.word 0,0,0,0,0,3,0,3,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0
+00:080009DA 0000
+00:080009DC 0000
+00:080009DE 0000
+00:080009E0 0000
+00:080009E2 0300
+00:080009E4 0000
+00:080009E6 0300
+00:080009E8 0000
+00:080009EA 0000
+00:080009EC 0000
+00:080009EE 0000
+00:080009F0 0000
+00:080009F2 0000
+00:080009F4 0200
+00:080009F6 0000
+00:080009F8 0000
+00:080009FA 0000
+00:080009FC 0000
+00:080009FE 0000
+00:08000A00 0000
+00:08000A02 0000
+00:08000A04 0000
+00:08000A06 0000
+00:08000A08 0000
+00:08000A0A 0200
+00:08000A0C 0000
+00:08000A0E 0000
+00:08000A10 0200
+00:08000A12 0000
+00:08000A14 0000
+00:08000A16 0000
+00:08000A18 0000            	   433: 	.word 0,0,3,3,3,4,3,4,3,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,3
+00:08000A1A 0000
+00:08000A1C 0300
+00:08000A1E 0300
+00:08000A20 0300
+00:08000A22 0400
+00:08000A24 0300
+00:08000A26 0400
+00:08000A28 0300
+00:08000A2A 0000
+00:08000A2C 0000
+00:08000A2E 0000
+00:08000A30 0000
+00:08000A32 0000
+00:08000A34 0000
+00:08000A36 0000
+00:08000A38 0000
+00:08000A3A 0000
+00:08000A3C 0000
+00:08000A3E 0000
+00:08000A40 0300
+00:08000A42 0300
+00:08000A44 0000
+00:08000A46 0000
+00:08000A48 0000
+00:08000A4A 0000
+00:08000A4C 0000
+00:08000A4E 0000
+00:08000A50 0000
+00:08000A52 0000
+00:08000A54 0000
+00:08000A56 0300
+00:08000A58 0000            	   434: 	.word 0,3,4,4,4,4,4,4,4,3,0,5,0,0,0,0,0,3,3,3,4,4,3,3,0,0,0,0,0,3,3,4
+00:08000A5A 0300
+00:08000A5C 0400
+00:08000A5E 0400
+00:08000A60 0400
+00:08000A62 0400
+00:08000A64 0400
+00:08000A66 0400
+00:08000A68 0400
+00:08000A6A 0300
+00:08000A6C 0000
+00:08000A6E 0500
+00:08000A70 0000
+00:08000A72 0000
+00:08000A74 0000
+00:08000A76 0000
+00:08000A78 0000
+00:08000A7A 0300
+00:08000A7C 0300
+00:08000A7E 0300
+00:08000A80 0400
+00:08000A82 0400
+00:08000A84 0300
+00:08000A86 0300
+00:08000A88 0000
+00:08000A8A 0000
+00:08000A8C 0000
+00:08000A8E 0000
+00:08000A90 0000
+00:08000A92 0300
+00:08000A94 0300
+00:08000A96 0400
+00:08000A98 0300            	   435: 	.word 3,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,4,4,4
+00:08000A9A 0400
+00:08000A9C 0400
+00:08000A9E 0400
+00:08000AA0 0400
+00:08000AA2 0400
+00:08000AA4 0400
+00:08000AA6 0400
+00:08000AA8 0400
+00:08000AAA 0400
+00:08000AAC 0300
+00:08000AAE 0300
+00:08000AB0 0300
+00:08000AB2 0300
+00:08000AB4 0300
+00:08000AB6 0300
+00:08000AB8 0300
+00:08000ABA 0400
+00:08000ABC 0400
+00:08000ABE 0400
+00:08000AC0 0400
+00:08000AC2 0400
+00:08000AC4 0400
+00:08000AC6 0400
+00:08000AC8 0300
+00:08000ACA 0300
+00:08000ACC 0300
+00:08000ACE 0300
+00:08000AD0 0300
+00:08000AD2 0400
+00:08000AD4 0400
+00:08000AD6 0400
+00:08000AD8 0300            	   436: 	.word 3,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,4,4,4
+00:08000ADA 0400
+00:08000ADC 0400
+00:08000ADE 0400
+00:08000AE0 0400
+00:08000AE2 0400
+00:08000AE4 0400
+00:08000AE6 0400
+00:08000AE8 0400
+00:08000AEA 0400
+00:08000AEC 0300
+00:08000AEE 0300
+00:08000AF0 0300
+00:08000AF2 0300
+00:08000AF4 0300
+00:08000AF6 0300
+00:08000AF8 0300
+00:08000AFA 0400
+00:08000AFC 0400
+00:08000AFE 0400
+00:08000B00 0400
+00:08000B02 0400
+00:08000B04 0400
+00:08000B06 0400
+00:08000B08 0300
+00:08000B0A 0300
+00:08000B0C 0300
+00:08000B0E 0300
+00:08000B10 0300
+00:08000B12 0400
+00:08000B14 0400
+00:08000B16 0400
+00:08000B18 0000            	   437: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:08000B1A 0000
+00:08000B1C 0000
+00:08000B1E 0000
+00:08000B20 0000
+00:08000B22 0000
+00:08000B24 0000
+00:08000B26 0000
+00:08000B28 0000
+00:08000B2A 0000
+00:08000B2C 0000
+00:08000B2E 0000
+00:08000B30 0000
+00:08000B32 0000
+00:08000B34 0000
+00:08000B36 0000
+00:08000B38 0000
+00:08000B3A 0000
+00:08000B3C 0000
+00:08000B3E 0000
+00:08000B40 0000
+00:08000B42 0000
+00:08000B44 0000
+00:08000B46 0000
+00:08000B48 0000
+00:08000B4A 0000
+00:08000B4C 0000
+00:08000B4E 0000
+00:08000B50 0000
+00:08000B52 0000
+00:08000B54 0000
+00:08000B56 0000
+00:08000B58 0300            	   438: 	.word 3,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,4,4,4
+00:08000B5A 0400
+00:08000B5C 0400
+00:08000B5E 0400
+00:08000B60 0400
+00:08000B62 0400
+00:08000B64 0400
+00:08000B66 0400
+00:08000B68 0400
+00:08000B6A 0400
+00:08000B6C 0300
+00:08000B6E 0300
+00:08000B70 0300
+00:08000B72 0300
+00:08000B74 0300
+00:08000B76 0300
+00:08000B78 0300
+00:08000B7A 0400
+00:08000B7C 0400
+00:08000B7E 0400
+00:08000B80 0400
+00:08000B82 0400
+00:08000B84 0400
+00:08000B86 0400
+00:08000B88 0300
+00:08000B8A 0300
+00:08000B8C 0300
+00:08000B8E 0300
+00:08000B90 0300
+00:08000B92 0400
+00:08000B94 0400
+00:08000B96 0400
+00:08000B98 0000            	   439: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:08000B9A 0000
+00:08000B9C 0000
+00:08000B9E 0000
+00:08000BA0 0000
+00:08000BA2 0000
+00:08000BA4 0000
+00:08000BA6 0000
+00:08000BA8 0000
+00:08000BAA 0000
+00:08000BAC 0000
+00:08000BAE 0000
+00:08000BB0 0000
+00:08000BB2 0000
+00:08000BB4 0000
+00:08000BB6 0000
+00:08000BB8 0000
+00:08000BBA 0000
+00:08000BBC 0000
+00:08000BBE 0000
+00:08000BC0 0000
+00:08000BC2 0000
+00:08000BC4 0000
+00:08000BC6 0000
+00:08000BC8 0000
+00:08000BCA 0000
+00:08000BCC 0000
+00:08000BCE 0000
+00:08000BD0 0000
+00:08000BD2 0000
+00:08000BD4 0000
+00:08000BD6 0000
+00:08000BD8 0300            	   440: 	.word 3,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,4,4,4
+00:08000BDA 0400
+00:08000BDC 0400
+00:08000BDE 0400
+00:08000BE0 0400
+00:08000BE2 0400
+00:08000BE4 0400
+00:08000BE6 0400
+00:08000BE8 0400
+00:08000BEA 0400
+00:08000BEC 0300
+00:08000BEE 0300
+00:08000BF0 0300
+00:08000BF2 0300
+00:08000BF4 0300
+00:08000BF6 0300
+00:08000BF8 0300
+00:08000BFA 0400
+00:08000BFC 0400
+00:08000BFE 0400
+00:08000C00 0400
+00:08000C02 0400
+00:08000C04 0400
+00:08000C06 0400
+00:08000C08 0300
+00:08000C0A 0300
+00:08000C0C 0300
+00:08000C0E 0300
+00:08000C10 0300
+00:08000C12 0400
+00:08000C14 0400
+00:08000C16 0400
+00:08000C18 0000            	   441: 	.word 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+00:08000C1A 0000
+00:08000C1C 0000
+00:08000C1E 0000
+00:08000C20 0000
+00:08000C22 0000
+00:08000C24 0000
+00:08000C26 0000
+00:08000C28 0000
+00:08000C2A 0000
+00:08000C2C 0000
+00:08000C2E 0000
+00:08000C30 0000
+00:08000C32 0000
+00:08000C34 0000
+00:08000C36 0000
+00:08000C38 0000
+00:08000C3A 0000
+00:08000C3C 0000
+00:08000C3E 0000
+00:08000C40 0000
+00:08000C42 0000
+00:08000C44 0000
+00:08000C46 0000
+00:08000C48 0000
+00:08000C4A 0000
+00:08000C4C 0000
+00:08000C4E 0000
+00:08000C50 0000
+00:08000C52 0000
+00:08000C54 0000
+00:08000C56 0000
+00:08000C58 0300            	   442: 	.word 3,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,4,4,4
+00:08000C5A 0400
+00:08000C5C 0400
+00:08000C5E 0400
+00:08000C60 0400
+00:08000C62 0400
+00:08000C64 0400
+00:08000C66 0400
+00:08000C68 0400
+00:08000C6A 0400
+00:08000C6C 0300
+00:08000C6E 0300
+00:08000C70 0300
+00:08000C72 0300
+00:08000C74 0300
+00:08000C76 0300
+00:08000C78 0300
+00:08000C7A 0400
+00:08000C7C 0400
+00:08000C7E 0400
+00:08000C80 0400
+00:08000C82 0400
+00:08000C84 0400
+00:08000C86 0400
+00:08000C88 0300
+00:08000C8A 0300
+00:08000C8C 0300
+00:08000C8E 0300
+00:08000C90 0300
+00:08000C92 0400
+00:08000C94 0400
+00:08000C96 0400
+                            	   443: 
+                            	   444: 
+                            	   445: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                            	   446: 
+
+
+Symbols by name:
+Delay                            A:080001F0
+GbaStart                         A:080000E8
+InfLoop                          A:080001D4
+LDIR16                           A:08000220
+LDIR16B                          A:08000224
+Palettes                         A:08000238
+ramarea                          S:02000000
+SetSprite                        A:080001FC
+Tilemap                          A:08000498
+TilePatterns                     A:08000258
+TilePatterns_End                 A:08000498
+
+Symbols by value:
+02000000 ramarea
+080000E8 GbaStart
+080001D4 InfLoop
+080001F0 Delay
+080001FC SetSprite
+08000220 LDIR16
+08000224 LDIR16B
+08000238 Palettes
+08000258 TilePatterns
+08000498 Tilemap
+08000498 TilePatterns_End
