@@ -53,8 +53,13 @@ TurnCheckA:
 	bne TurnLoop
 	bl TryPlaceSymbol			; Try write X/O on selected tile (ignored if occupied)
 	bl WaitForReleaseAny		; release press
-	b TurnLoop
+	cmp r9,#1					; Did we successfully place a symbol?
 
+	beq TurnLoopExit			; YES: Exit the "while selecting" loop!
+	b TurnLoop
+TurnLoopExit:
+	bl SwitchTurn				; Explicitly switch the turn
+	b TurnLoop					; Restart the loop for the next player
 ; ---  INCLUDED COMPILED LIBRARIES AND BOA LOGIC  --- 
 
 ; ---
