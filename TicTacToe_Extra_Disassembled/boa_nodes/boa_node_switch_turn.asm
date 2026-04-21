@@ -1,0 +1,2 @@
+	bl SwitchTurn
+	b TurnLoop
