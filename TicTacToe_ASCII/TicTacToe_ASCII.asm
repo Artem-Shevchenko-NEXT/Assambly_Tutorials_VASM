@@ -61,40 +61,43 @@ TurnLoop:
 	bl ReadJoystick				; Read input in project format: SSBARLDU (0 means pressed)
 
 	tst r0,#0b00000100			; bit2 = LEFT
-	bne TurnCheckRight
+	bne 1f						; if not pressed -> next elif block
 	bl MoveLeft					; Move one tile left if inside bounds
 	bl WaitForReleaseAny		; wait until direction/A released
 	b TurnLoop
 
-TurnCheckRight:
+1:
 	tst r0,#0b00001000			; bit3 = RIGHT
-	bne TurnCheckUp
+	bne 1f						; if not pressed -> next elif block
 	bl MoveRight				; Move one tile right if inside bounds
 	bl WaitForReleaseAny		; release press
 	b TurnLoop  
 
-TurnCheckUp:
+1:
 	tst r0,#0b00000001			; bit0 = UP
-	bne TurnCheckDown           
+	bne 1f						; if not pressed -> next elif block
 	bl MoveUp					; Move one tile up if inside bounds
 	bl WaitForReleaseAny		; release press
 	b TurnLoop
 
-TurnCheckDown:
+1:
 	tst r0,#0b00000010			; bit1 = DOWN
-	bne TurnCheckA
+	bne 1f						; if not pressed -> next elif block
 	bl MoveDown					; Move one tile down if inside bounds
 	bl WaitForReleaseAny		; release press
 	b TurnLoop
 
-TurnCheckA:
+1:
 	tst r0,#0b00010000			; bit4 = A button (place symbol)
-	bne TurnLoop
+	bne 1f						; if not pressed -> next elif block
 	bl TryPlaceSymbol			; Try write X/O on selected tile (ignored if occupied)
 	bl WaitForReleaseAny		; release press
 
 	cmp r9,#1					; Did we successfully place a symbol?
-	beq TurnLoopExit			; YES: Exit the "while selecting" loop!
+	beq TurnLoopExit			; YES: Exit the "while selecting" loop
+	b TurnLoop
+1:
+	; no input matched (or only other buttons): continue polling
 	b TurnLoop
 TurnLoopExit:
 	bl SwitchTurn				; Explicitly switch the turn

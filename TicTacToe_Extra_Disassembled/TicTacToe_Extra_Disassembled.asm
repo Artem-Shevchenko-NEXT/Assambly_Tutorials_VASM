@@ -32,11 +32,12 @@
 .include "boa_nodes/actions/boa_node_act_wait_release.asm"
 ; Boa Mapping:   (End of 'if' block indent: jump back to the start of the while loop)
 .include "boa_nodes/boa_node_jmp_loop.asm"
-; Boa Mapping:   (If the Left button wasn't pressed, skip down to this label)
-.include "boa_nodes/labels/boa_node_label_right.asm"
+
 ;                                                               ---
 
 ; ---
+; Boa Mapping:   (If the previouse condition wasn't true, skips down to this label)
+.include "boa_nodes/labels/boa_node_label_next_cond.asm"
 ; Functionality: Specific AST nodes representing an 'Elif' condition and its body.
 ; Boa Mapping:   `elif InputRight():`
 .include "boa_nodes/conditions/boa_node_cond_if_right.asm"
@@ -46,11 +47,11 @@
 .include "boa_nodes/actions/boa_node_act_wait_release.asm"
 ; Boa Mapping:   (End of 'elif' block indent: jump back to the start of the while loop)
 .include "boa_nodes/boa_node_jmp_loop.asm"
-; Boa Mapping:   (If the Right button wasn't pressed, skip down to this label)
-.include "boa_nodes/labels/boa_node_label_up.asm"
 ;                                                               ---
 
 ; ---
+; Boa Mapping:   (If the previouse condition wasn't true, skips down to this label)
+.include "boa_nodes/labels/boa_node_label_next_cond.asm"
 ; Functionality: Specific AST nodes representing an 'Elif' condition and its body.
 ; Boa Mapping:   `elif InputUp():`
 .include "boa_nodes/conditions/boa_node_cond_if_up.asm"
@@ -60,11 +61,11 @@
 .include "boa_nodes/actions/boa_node_act_wait_release.asm"
 ; Boa Mapping:   (End of 'elif' block indent: jump back to the start of the while loop)
 .include "boa_nodes/boa_node_jmp_loop.asm"
-; Boa Mapping:   (If the Up button wasn't pressed, skip down to this label)
-.include "boa_nodes/labels/boa_node_label_down.asm"
 ;                                                               ---
 
 ; ---
+; Boa Mapping:   (If the previouse condition wasn't true, skips down to this label)
+.include "boa_nodes/labels/boa_node_label_next_cond.asm"
 ; Functionality: Specific AST nodes representing an 'Elif' condition and its body.
 ; Boa Mapping:   `elif InputDown():`
 .include "boa_nodes/conditions/boa_node_cond_if_down.asm"
@@ -74,11 +75,11 @@
 .include "boa_nodes/actions/boa_node_act_wait_release.asm"
 ; Boa Mapping:   (End of 'elif' block indent: jump back to the start of the while loop)
 .include "boa_nodes/boa_node_jmp_loop.asm"
-; Boa Mapping:   (If the Down button wasn't pressed, skip down to this label)
-.include "boa_nodes/labels/boa_node_label_a.asm"
 ;                                                               ---
 
 ; ---
+; Boa Mapping:   (If the previouse condition wasn't true, skips down to this label)
+.include "boa_nodes/labels/boa_node_label_next_cond.asm"
 ; Functionality: Specific AST nodes combining an action with loop termination.
 ; Boa Mapping:   `elif InputA():`
 .include "boa_nodes/conditions/boa_node_cond_if_a.asm"
@@ -90,11 +91,20 @@
 .include "boa_nodes/conditions/boa_node_cond_break.asm"
 ; Boa Mapping:   (End of 'elif' block indent: jump back to the start of the while loop)
 .include "boa_nodes/boa_node_jmp_loop.asm"
-; Boa Mapping:   (This label marks the exit point of the entire while loop)
-.include "boa_nodes/labels/boa_node_label_exit.asm"
 ;                                                               ---
 
 ; ---
+; Functionality: Final fallthrough path for the if/elif chain.
+;                If InputA() is NOT pressed (last condition failed),
+;                control lands here and continues polling next condition.
+; Boa Mapping:   (If no condition in the chain matched, continue while loop)
+.include "boa_nodes/labels/boa_node_label_next_cond.asm"
+; Boa Mapping:   (Loop continuation for no-match case)
+.include "boa_nodes/boa_node_jmp_loop.asm"
+;                                                               ---
+; ---
+; Boa Mapping:   (This label marks the exit point of the entire while loop)
+.include "boa_nodes/labels/boa_node_label_exit.asm"
 ; Functionality: Explicitly changes the current symbol between players after the turn.
 ; Boa Mapping:   `if symbol == 'x': Turn('o') else: Turn('x')`
 .include "boa_nodes/boa_node_switch_turn.asm"
